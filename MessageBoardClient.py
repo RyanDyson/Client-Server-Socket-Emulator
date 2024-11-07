@@ -6,7 +6,7 @@ import signal
 
 clientSocket = None #initialize clientSocket to None
 
-def signal_handler(sig, frame):  #handles when client force quites via terminal (CTRL + C)
+def signalHandler(sig, frame):  #handles when client force quites via terminal (CTRL + C)
     clientSocket.send("QUIT".encode())
     isOk = clientSocket.recv(1024).decode()
     if clientSocket and isOk == "OK":
@@ -24,14 +24,14 @@ def main(ipAddress, serverPortNum):
         if (Command == "POST"):
             isDone = False
             while not isDone: #loops while user still want to post
-                newMsg = input("Client, enter a message: ").strip() #get user input
+                newMsg = input("Client - enter a message: ").strip() #get user input
                 clientSocket.send(newMsg.encode()) #set user input that is encoded
                 if (newMsg == "#"): #if input == #, break the loop
                     isDone = True
                     break
             isOk = clientSocket.recv(1024).decode() #check response from server
             if (isOk == "OK"):
-                print("Server: OK, Message added successfully")
+                print("Server: OK - Message added successfully")
             else: 
                 print("Server: ERROR - Message was not received")
 
@@ -45,12 +45,12 @@ def main(ipAddress, serverPortNum):
                     isDone = True
                     break
 
-                print("server: ", currMessage)
+                print("Server: ", currMessage)
 
         elif (Command == "DELETE"):
             isDone = False
             while not isDone:
-                messageID = input("Client, enter a message ID: ").strip() #get the IDs to delete
+                messageID = input("Client - enter a message ID: ").strip() #get the IDs to delete
                 clientSocket.send(messageID.encode()) #send the ID to server
                 if (messageID == "#"): #break if user is done
                     isDone = True
@@ -60,11 +60,12 @@ def main(ipAddress, serverPortNum):
             if (isOk != "OK"): #check the response
                 print("Server: ERROR - Wrong ID")
             else:
-                print("Server: Message(s) deleted successfully")
+                print("Server: OK - Message(s) deleted successfully")
 
         elif (Command == "QUIT"):
             isOk = clientSocket.recv(1024).decode() #get response from server
             if (isOk == "OK"):
+                print("Server: OK - Closing socket")
                 clientSocket.close()
                 sys.exit(0)
 
@@ -85,7 +86,7 @@ def main(ipAddress, serverPortNum):
         sys.exit(1)
 
     while True: 
-        command = input("Client, enter a command: ").strip().upper() #get command from user
+        command = input("Client - enter a command: ").strip().upper() #get command from user
         handleCommand(command)
         
 
@@ -97,7 +98,7 @@ if __name__ == "__main__": #dunder method to execute main func
     serverIp = sys.argv[1]
     serverPort = int(sys.argv[2])
 
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, signalHandler) #handle when ctrl + c
+    signal.signal(signal.SIGTERM, signalHandler) #handle other ways of force quitting
 
     main(serverIp, serverPort) #calls main func to handle ther client
