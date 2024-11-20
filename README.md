@@ -16,8 +16,11 @@ This program was written in Python 3.12.6 and in VSC, windows 11.
 
 You can run the python file via the terminal. Start by CD-ing in the directory the files are stored.
 
-then simply type **py MessageBoardClient.py < IP address > < Server Port Num >**
+then simply type **py MessageBoardClient_57883349.py < IP address > < Server Port Num >**
 
 in this case you can use
 IP address = 127.0.0.1
 server Port num = 16111
+
+for example:
+PS D:\schoolwork\SEM_A_24_25\cs3201 - Computer networks\Assignment> py MessageBoardClient_57883349.py 127.0.0.1 16111
